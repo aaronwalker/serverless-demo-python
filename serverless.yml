@@ -1,0 +1,48 @@
+service: serverless-demo-python
+
+plugins:
+  - serverless-cloudformation-sub-variables
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  deploymentBucket:
+    name: 855280047356.eu-central.ciinabox
+  # vpc:
+  #     securityGroupIds:
+  #       - ${cf:${opt:cfenv}.SecurityGroupBackplane}
+  #     subnetIds:
+  #       - ${cf:${opt:cfenv}.SubnetCompute0}
+  #       - ${cf:${opt:cfenv}.SubnetCompute1}
+  #       - ${cf:${opt:cfenv}.SubnetCompute2}
+
+
+package:
+  individually: true
+
+functions:
+  hello:
+    handler: functions/hello/lib/function.main
+    environment:
+      NAME: ${opt:name, "base2"}
+    events:
+      - http: GET hello
+    package:
+      exclude:
+        - ./**
+      include:
+        - functions/hello/lib/function.py
+        - functions/hello/venv/lib/python3.6/site-packages/**
+
+custom:
+  config:
+    region: ${opt:region, self:provider.region}
+    stage: ${opt:stage, self:provider.stage}
+    cfenv: ${opt:cfenv, 'dev'}
+
+Resources:
+  Topic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: '#{AWS::StackName}-topic' # Uses a hash `#` for a Fn::Sub variable

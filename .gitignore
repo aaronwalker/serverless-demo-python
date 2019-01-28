@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+.idea/
+.serverless/
+venv/
+*.egg-info/
+__pycache__/
+node_modules/
