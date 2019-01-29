@@ -10,7 +10,7 @@ test:
 	python -m venv venv; \
 	source venv/bin/activate; \
 	pip install -r requirements.txt; \
-	coverage run --source=lib/ setup.py test
+	coverage run setup.py test
 
 ssm:
 ifneq (,$(wildcard ssm-params-${CF_ENV}.yml))
