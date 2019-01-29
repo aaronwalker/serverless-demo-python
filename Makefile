@@ -7,6 +7,8 @@ SHELL := /bin/bash
 
 test:
 	cd functions/hello; \
+	python -m venv venv; \
+	source venv/bin/activate; \
 	pip install -r requirements.txt; \
 	coverage run setup.py test
 
